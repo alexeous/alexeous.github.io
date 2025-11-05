@@ -1,1 +1,47 @@
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Mmhr47Q6yRA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h3>Accelerometer:</h3>
+<div id="accelerometer-info">
+  <input id="ax" type="range" min="-20" max="20" value="0" step="0.01">
+  <input id="ay" type="range" min="-20" max="20" value="4" step="0.01">
+  <input id="az" type="range" min="-20" max="20" value="-5" step="0.01">
+</div>
+<h3>Gravity:</h3>
+<div id="gravity-info">
+  <input id="gx" type="range" min="-20" max="20" value="0" step="0.01">
+  <input id="gy" type="range" min="-20" max="20" value="4" step="0.01">
+  <input id="gz" type="range" min="-20" max="20" value="-5" step="0.01">
+</div>
+<h3>Pure acceleration:</h3>
+<div id="pure-acceleration-info">
+  <input id="pax" type="range" min="-20" max="20" value="0" step="0.01">
+  <input id="pay" type="range" min="-20" max="20" value="4" step="0.01">
+  <input id="paz" type="range" min="-20" max="20" value="-5" step="0.01">
+</div>
+
+<script>
+  const accelerometer = new Accelerometer({ frequency: 60 })
+  const gravitySensor = new GravitySensor({ frequency: 60 })
+
+  accelerometer.addEventListener("reading", update);
+  gravitySensor.addEventListener("reading", update);
+
+  accelerometer.start()
+  gravitySensor.start()
+  
+  function update() {
+    set("ax", accelerometer.x)
+    set("ay", accelerometer.y)
+    set("az", accelerometer.z)
+    
+    set("gx", gravitySensor.x)
+    set("gy", gravitySensor.y)
+    set("gz", gravitySensor.z)
+    
+    set("pax", accelerometer.x - gravitySensor.x)
+    set("pay", accelerometer.y - gravitySensor.y)
+    set("paz", accelerometer.z - gravitySensor.z)
+  }
+
+  function set(id, value) {
+    document.getElementById(id).value = value
+  }
+</script>
